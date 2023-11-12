@@ -1,11 +1,11 @@
 use std::collections::HashSet;
 #[derive(Debug)]
 pub struct TransitionTable {
-    alphabet: HashSet<char>,
-    state: HashSet<String>,
-    initial: String,
-    accepting: HashSet<String>,
-    transitions: Vec<Transition>
+    pub alphabet: HashSet<char>,
+    pub state: HashSet<String>,
+    pub initial: String,
+    pub accepting: HashSet<String>,
+    pub transitions: Vec<Transition>
 }
 
 impl TransitionTable {
@@ -29,9 +29,9 @@ impl TransitionTable {
 
 #[derive(Debug)]
 pub struct Transition {
-    from: String,
-    to: String,
-    symbol: char
+    pub from: String,
+    pub to: String,
+    pub symbol: char
 }
 
 
