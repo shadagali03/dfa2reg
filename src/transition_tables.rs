@@ -30,8 +30,8 @@ impl TransitionTable {
 #[derive(Debug)]
 pub struct Transition {
     pub from: String,
-    pub to: String,
-    pub symbol: char
+    pub symbol: char,
+    pub to: String
 }
 
 
