@@ -1,19 +1,20 @@
+use std::collections::HashSet;
 #[derive(Debug)]
 pub struct TransitionTable {
-    alphabet: Vec<char>,
-    state: Vec<String>,
+    alphabet: HashSet<char>,
+    state: HashSet<String>,
     initial: String,
-    accepting: Vec<String>,
+    accepting: HashSet<String>,
     transitions: Vec<Transition>
 }
 
 impl TransitionTable {
     pub fn new() -> Self {
         Self {
-            alphabet: Vec::new(),
-            state: Vec::new(),
+            alphabet: HashSet::new(),
+            state: HashSet::new(),
             initial: String::new(),
-            accepting: Vec::new(),
+            accepting: HashSet::new(),
             transitions: Vec::new()
         }
     }
