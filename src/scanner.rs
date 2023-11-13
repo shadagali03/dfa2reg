@@ -18,7 +18,7 @@ impl Scanner {
                                         .map(|s| s.to_string())
                                         .collect();
                 match Self::parse_input(lines) {
-                    Ok(_transition_table) => todo!(),
+                    Ok(_transition_table) => Ok(()),
                     Err(msg) => return Err(msg)
                 }
             }
@@ -26,7 +26,7 @@ impl Scanner {
     }
 
     fn validate_alphabet(alphabet: Vec<char>, org_alphabet: Vec<&str>) -> bool {
-        for (_, c) in alphabet.iter().enumerate() {
+        for c in alphabet.iter() {
             match c {
                 'A'..='Z' | 'a'..='z' | '!' => (),
                 _ => return false
@@ -37,7 +37,6 @@ impl Scanner {
     }
     pub fn parse_input(source: Vec<String>) -> Result<TransitionTable, String> {
         let mut user_transition = TransitionTable::new();
-        println!("{:?}", source);
         // Handle alphabet
         match source.get(0) {
             Some(alphabet) => {
