@@ -27,11 +27,15 @@ impl TransitionTable {
 }
 
 
+// This will the data will be initially be processed
 #[derive(Debug)]
 pub struct Transition {
     pub from: String,
     pub symbol: char,
     pub to: String
 }
+
+
+// Converted into ("state"", 'symbol') : ["state", "state" ...]
 
 
