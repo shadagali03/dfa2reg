@@ -63,7 +63,7 @@ impl Scanner {
                                                 .split(",")
                                                 .map(|s| s.to_string())
                                                 .collect();
-                user_transition.state = HashSet::from_iter(insert_states.iter().cloned());
+                user_transition.states = HashSet::from_iter(insert_states.iter().cloned());
             }
             None => return Err("Vector does not contain states".to_string())
         }
@@ -101,11 +101,12 @@ impl Scanner {
                         to: transition_parts[2].to_owned()
                     });
                 }
+                let _ = user_transition.convert_transition_table();
             }
             None => return Err("Vector does not contain transitions".to_string())
         }
 
-        println!("{:?}", user_transition);
+        // println!("{:?}", user_transition);
 
 
         Ok(user_transition)
