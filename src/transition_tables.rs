@@ -1,4 +1,6 @@
 use std::collections::{HashSet, HashMap};
+use std::fmt;
+
 #[derive(Debug)]
 pub struct TransitionTable {
     pub alphabet: HashSet<char>,
@@ -25,6 +27,7 @@ impl TransitionTable {
         todo!();
     }
 
+    // Converted into ("state"", 'symbol') : ["state", "state" ...]
     pub fn convert_transition_table(&mut self) -> Result<(), String> {
         let mut delta_transitions = HashMap::<(&str, &char), Vec<&str>>::new();
         // Initialize the new delta table
@@ -43,7 +46,7 @@ impl TransitionTable {
             }
         }
 
-        println!("{:?}", delta_transitions);
+        println!("{}", self);
         Ok(())
     }
 }
@@ -56,6 +59,33 @@ pub struct Transition {
     pub symbol: char,
     pub to: String
 }
-// Converted into ("state"", 'symbol') : ["state", "state" ...]
 
+impl fmt::Display for TransitionTable {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "Alphabet: ")?;
+        for symbol in self.alphabet.iter() {
+            write!(f, "'{symbol}' ")?;
+        }
+        write!(f, "\n")?;
 
+        write!(f, "States: ")?;
+        for state in self.states.iter() {
+            write!(f, "'{state}' ")?
+        }
+        write!(f, "\n")?;
+
+        write!(f, "Initial: {}\n", self.initial)?;
+
+        write!(f, "Accepting: ")?;
+        for state in self.accepting.iter() {
+            write!(f, "'{state}' ")?
+        }
+        write!(f, "\n")?;
+
+        write!(f, "Transitions: ")?;
+        for t in self.transitions.iter() {
+            write!(f, "\nFrom: {}, Symbol: {}, To: {}", t.from, t.symbol, t.to)?;
+        }
+        write!(f, "")
+    }
+}
