@@ -4,6 +4,16 @@ use std::collections::HashSet;
 
 pub struct Scanner {}
 
+pub fn validate_alphabet(alphabet: Vec<char>, org_alphabet: Vec<&str>) -> bool {
+    for c in alphabet.iter() {
+        match c {
+            'A'..='Z' | 'a'..='z' | '!' => (),
+            _ => return false
+        }
+    }
+    return alphabet.len() == org_alphabet.len();
+}
+
 impl Scanner {
     pub fn new() -> Self {
         Self {}
@@ -25,16 +35,6 @@ impl Scanner {
         }
     }
 
-    fn validate_alphabet(alphabet: Vec<char>, org_alphabet: Vec<&str>) -> bool {
-        for c in alphabet.iter() {
-            match c {
-                'A'..='Z' | 'a'..='z' | '!' => (),
-                _ => return false
-            }
-        }
-        return alphabet.len() == org_alphabet.len();
-
-    }
     pub fn parse_input(source: Vec<String>) -> Result<TransitionTable, String> {
         let mut user_transition = TransitionTable::new();
         // Handle alphabet
@@ -47,7 +47,7 @@ impl Scanner {
                                                 .flat_map(|c| c.chars())
                                                 .collect();
 
-                if Self::validate_alphabet(insert_alphabet.clone(), org_alphabet) == false {
+                if validate_alphabet(insert_alphabet.clone(), org_alphabet) == false {
                     return Err("Alphabet needs to contain characters from A-Z, a-z, ! and needs to be seperated by comma".to_string());
                 }
                 user_transition.alphabet = HashSet::from_iter(insert_alphabet.iter().copied());
