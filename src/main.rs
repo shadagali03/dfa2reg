@@ -1,5 +1,7 @@
 use dfa2reg::scanner::Scanner;
 use std::{env, process};
+#[cfg(test)]
+mod tests;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
