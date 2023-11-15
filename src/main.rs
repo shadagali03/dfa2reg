@@ -1,5 +1,6 @@
 use dfa2reg::scanner::Scanner;
 use std::{env, process};
+
 #[cfg(test)]
 mod tests;
 

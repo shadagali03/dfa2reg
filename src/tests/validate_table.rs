@@ -15,9 +15,17 @@ fn alphabet_has_valid_chars() {
 }
 
 #[test]
-fn alphabet_has_invalid_chars() {
+fn alphabet_contains_numbers() {
     let alphabet = vec!['1', 'b', 'c', 'd', '!'];
     let org_alphabet = vec!["1", "b", "c", "d", "!"];
+
+    assert_eq!(true, validate_alphabet(alphabet, org_alphabet), "Alphabet does not contain valid characters");
+}
+
+#[test]
+fn alphabet_has_invalid_chars() {
+    let alphabet = vec!['#', 'b', 'c', 'd', '!'];
+    let org_alphabet = vec!["#", "b", "c", "d", "!"];
 
     assert_eq!(false, validate_alphabet(alphabet, org_alphabet), "Alphabet does not contain valid characters");
 }
