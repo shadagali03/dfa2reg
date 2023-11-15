@@ -3,12 +3,12 @@ use std::fmt;
 
 #[derive(Debug)]
 pub struct TransitionTable {
-    pub alphabet: HashSet<char>,
+    pub alphabet: HashSet<String>,
     pub states: HashSet<String>,
     pub initial: String,
     pub accepting: HashSet<String>,
     pub transitions: Vec<Transition>,
-    pub delta_transitions: HashMap<(String, char), Vec<String>>,
+    pub delta_transitions: HashMap<(String, String), Vec<String>>,
 }
 
 impl TransitionTable {
@@ -19,7 +19,7 @@ impl TransitionTable {
             initial: String::new(),
             accepting: HashSet::new(),
             transitions: Vec::new(),
-            delta_transitions: HashMap::<(String, char), Vec<String>>::new(),
+            delta_transitions: HashMap::<(String, String), Vec<String>>::new(),
         }
     }
 
@@ -39,13 +39,13 @@ impl TransitionTable {
                     .insert((state.clone(), symbol.clone()), Vec::<String>::new());
             }
             self.delta_transitions
-                .insert((state.clone(), '!'), Vec::<String>::new());
+                .insert((state.clone(), "!".to_string()), Vec::<String>::new());
         }
 
         for transition in self.transitions.iter_mut() {
             match self
                 .delta_transitions
-                .get_mut(&(transition.from.clone(), transition.symbol))
+                .get_mut(&(transition.from.clone(), transition.symbol.clone()))
             {
                 Some(t) => t.push(transition.to.clone()),
                 None => (),
@@ -60,7 +60,7 @@ impl TransitionTable {
 #[derive(Debug)]
 pub struct Transition {
     pub from: String,
-    pub symbol: char,
+    pub symbol: String,
     pub to: String,
 }
 

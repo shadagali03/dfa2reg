@@ -7,9 +7,10 @@ use crate::transition_tables::TransitionTable;
 fn create_start_state(input_table: &mut TransitionTable) -> Result<(), String> {
     let start_state = input_table.initial.clone();
     input_table.initial = "START".to_string();
-    input_table
-        .delta_transitions
-        .insert((input_table.initial.clone(), '!'), vec![start_state]);
+    input_table.delta_transitions.insert(
+        (input_table.initial.clone(), "!".to_string()),
+        vec![start_state],
+    );
     Ok(())
 }
 
@@ -21,9 +22,10 @@ fn create_finish_state(input_table: &mut TransitionTable) -> Result<(), String> 
     input_table.accepting = HashSet::from(["FINAL".to_string()]);
 
     for accepting in prev_accept.iter() {
-        input_table
-            .delta_transitions
-            .insert((accepting.clone(), '!'), vec!["FINAL".to_string()]);
+        input_table.delta_transitions.insert(
+            (accepting.clone(), "!".to_string()),
+            vec!["FINAL".to_string()],
+        );
     }
 
     Ok(())
