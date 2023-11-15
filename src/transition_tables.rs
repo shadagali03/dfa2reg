@@ -90,6 +90,16 @@ impl fmt::Display for TransitionTable {
         for t in self.transitions.iter() {
             write!(f, "\nFrom: {}, Symbol: {}, To: {}", t.from, t.symbol, t.to)?;
         }
+
+        write!(f, "\nFormatted Delta Transitions: \n")?;
+        for ((from, symbol), value) in &self.delta_transitions {
+            write!(f, "({from}, {symbol}): [ ")?;
+            for s in value {
+                write!(f, "{s} ")?;
+            }
+            write!(f, "]\n")?;
+        }
+
         write!(f, "")
     }
 }

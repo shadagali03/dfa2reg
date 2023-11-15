@@ -30,9 +30,7 @@ impl Scanner {
                     .map(|s| s.to_string())
                     .collect();
                 match Self::parse_input(lines) {
-                    Ok(mut transition_table) => {
-                        gnfa_process::create_start_state(&mut transition_table)
-                    }
+                    Ok(mut transition_table) => gnfa_process::run_gnfa(&mut transition_table),
                     Err(msg) => return Err(msg),
                 }
             }
