@@ -30,9 +30,7 @@ impl Scanner {
                     .map(|s| s.to_string())
                     .collect();
                 match Self::parse_input(lines) {
-                    Ok(mut transition_table) => {
-                        gnfa_process::create_start_state(&mut transition_table)
-                    }
+                    Ok(mut transition_table) => gnfa_process::run_gnfa(&mut transition_table),
                     Err(msg) => return Err(msg),
                 }
             }
@@ -44,14 +42,15 @@ impl Scanner {
         // Handle alphabet
         match source.get(0) {
             Some(alphabet) => {
-                let org_alphabet: Vec<&str> = alphabet.split(",").collect();
-                let insert_alphabet: Vec<char> =
-                    alphabet.split(",").flat_map(|c| c.chars()).collect();
+                let org_alphabet: Vec<String> =
+                    alphabet.split(",").map(|s| s.to_string()).collect();
+                //let insert_alphabet: Vec<String> =
+                //alphabet.split(",").flat_map(|c| c.chars()).collect();
 
-                if validate_alphabet(insert_alphabet.clone(), org_alphabet) == false {
-                    return Err("Alphabet needs to contain characters from A-Z, a-z, ! and needs to be seperated by comma".to_string());
-                }
-                user_transition.alphabet = HashSet::from_iter(insert_alphabet.iter().copied());
+                //if validate_alphabet(insert_alphabet.clone(), org_alphabet) == false {
+                //return Err("Alphabet needs to contain characters from A-Z, a-z, ! and needs to be seperated by comma".to_string());
+                //}
+                user_transition.alphabet = HashSet::from_iter(org_alphabet.iter().cloned());
             }
             None => return Err("Vector does not contain alphabet".to_string()),
         }
@@ -90,7 +89,7 @@ impl Scanner {
 
                     user_transition.transitions.push(Transition {
                         from: transition_parts[0].to_owned(),
-                        symbol: transition_parts[1].chars().next().unwrap(),
+                        symbol: transition_parts[1].to_string(),
                         to: transition_parts[2].to_owned(),
                     });
                 }
