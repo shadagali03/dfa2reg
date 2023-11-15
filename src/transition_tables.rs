@@ -1,4 +1,4 @@
-use std::collections::{HashSet, HashMap};
+use std::collections::{HashMap, HashSet};
 use std::fmt;
 
 #[derive(Debug)]
@@ -7,7 +7,8 @@ pub struct TransitionTable {
     pub states: HashSet<String>,
     pub initial: String,
     pub accepting: HashSet<String>,
-    pub transitions: Vec<Transition>
+    pub transitions: Vec<Transition>,
+    pub delta_transitions: HashMap<(String, char), Vec<String>>,
 }
 
 impl TransitionTable {
@@ -17,7 +18,8 @@ impl TransitionTable {
             states: HashSet::new(),
             initial: String::new(),
             accepting: HashSet::new(),
-            transitions: Vec::new()
+            transitions: Vec::new(),
+            delta_transitions: HashMap::<(String, char), Vec<String>>::new(),
         }
     }
 
@@ -29,35 +31,37 @@ impl TransitionTable {
 
     // Converted into ("state"", 'symbol') : ["state", "state" ...]
     pub fn convert_transition_table(&mut self) -> Result<(), String> {
-        let mut delta_transitions = HashMap::<(&str, &char), Vec<&str>>::new();
+        // let mut delta_transitions = HashMap::<(&str, &char), Vec<&str>>::new();
         // Initialize the new delta table
         for state in self.states.iter() {
             for symbol in self.alphabet.iter() {
-                delta_transitions.insert((state, symbol), Vec::<&str>::new());
+                self.delta_transitions
+                    .insert((state.clone(), symbol.clone()), Vec::<String>::new());
             }
-            delta_transitions.insert((state, &'!'), Vec::<&str>::new());
+            self.delta_transitions
+                .insert((state.clone(), '!'), Vec::<String>::new());
         }
 
         for transition in self.transitions.iter_mut() {
-            let temp: &str = &transition.from[..];
-            match delta_transitions.get_mut(&(temp, &transition.symbol)) {
-                Some(t) => t.push(&transition.to),
-                None => ()
+            match self
+                .delta_transitions
+                .get_mut(&(transition.from.clone(), transition.symbol))
+            {
+                Some(t) => t.push(transition.to.clone()),
+                None => (),
             }
         }
 
-        println!("{}", self);
         Ok(())
     }
 }
-
 
 // This will the data will be initially be processed
 #[derive(Debug)]
 pub struct Transition {
     pub from: String,
     pub symbol: char,
-    pub to: String
+    pub to: String,
 }
 
 impl fmt::Display for TransitionTable {
