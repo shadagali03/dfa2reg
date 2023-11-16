@@ -9,6 +9,7 @@ pub struct TransitionTable {
     pub accepting: HashSet<String>,
     pub transitions: Vec<Transition>,
     pub delta_transitions: HashMap<(String, String), Vec<String>>,
+    pub state_to_state_transitions: HashMap<(String, String), String>,
 }
 
 impl TransitionTable {
@@ -20,6 +21,7 @@ impl TransitionTable {
             accepting: HashSet::new(),
             transitions: Vec::new(),
             delta_transitions: HashMap::<(String, String), Vec<String>>::new(),
+            state_to_state_transitions: HashMap::<(String, String), String>::new(),
         }
     }
 
@@ -52,6 +54,26 @@ impl TransitionTable {
             }
         }
 
+        Ok(())
+    }
+
+    // Will find all duplicate pairings (from, to) and combine the symbols using U -> or symbol
+    pub fn condense_transition_table(&mut self) -> Result<(), String> {
+        for transition in self.transitions.iter() {
+            if let Some(path) = self
+                .state_to_state_transitions
+                .get_mut(&(transition.from.clone(), transition.to.clone()))
+            {
+                path.push_str(" U ");
+                path.push_str(&transition.symbol.to_owned());
+            } else {
+                self.state_to_state_transitions.insert(
+                    (transition.from.clone(), transition.to.clone()),
+                    transition.symbol.clone(),
+                );
+            }
+        }
+        println!("{:?}", self.state_to_state_transitions);
         Ok(())
     }
 }

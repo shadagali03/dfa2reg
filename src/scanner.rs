@@ -9,7 +9,7 @@ pub struct Scanner {}
 pub fn validate_alphabet(alphabet: Vec<char>, org_alphabet: Vec<&str>) -> bool {
     for c in alphabet.iter() {
         match c {
-            'A'..='Z' | 'a'..='z' | '0'..='1' | '!' => (),
+            'a'..='z' | '0'..='1' | '!' => (),
             _ => return false,
         }
     }
@@ -94,6 +94,7 @@ impl Scanner {
                     });
                 }
                 let _ = user_transition.convert_transition_table();
+                let _ = user_transition.condense_transition_table();
             }
             None => return Err("Vector does not contain transitions".to_string()),
         }
