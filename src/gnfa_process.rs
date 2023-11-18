@@ -72,10 +72,11 @@ fn find_minimum_transitions_state(input_table: &mut TransitionTable) -> String {
     min_state.1
 }
 
-fn rip_state(input_table: &mut TransitionTable, to_rip: &String) {
+fn rip_state(input_table: &mut TransitionTable, to_rip: &String) -> TransitionTable {
     // Given to_rip find all all incoming and outgoing nodes and populate a vector
     let mut incoming: HashSet<&String> = HashSet::new();
     let mut outgoing: HashSet<&String> = HashSet::new();
+    let mut new_table = input_table.clone();
 
     // Populate incoming
     for (pair, _symbol) in input_table.state_to_state_transitions.iter() {
@@ -118,31 +119,41 @@ fn rip_state(input_table: &mut TransitionTable, to_rip: &String) {
                 .state_to_state_transitions
                 .get(&(to_rip.to_string(), to_rip.to_string()))
             {
-                let temp = path.wrap();
-                self_loop = format!("{temp}*");
+                let temp_path = path.wrap();
+                self_loop = format!("{temp_path}*");
             }
 
             let new_path = format!("{in_to_rip}{rip_to_out}{self_loop}");
-            let mut _concat_path = "".to_string();
+            let mut concat_path = "".to_string();
 
             if let Some(path) = input_table
                 .state_to_state_transitions
                 .get(&(in_node.to_string(), out_node.to_string()))
             {
-                _concat_path = format!("{} U {}", path, new_path);
-                println!("NEW PATH: {_concat_path}");
+                concat_path = format!("{} U {}", path, new_path);
+                println!("NEW PATH: {concat_path}");
             }
 
-            /*
-            input_table
+            new_table
                 .state_to_state_transitions
-                .insert((in_node.to_string(), out_node.to_string()), concat_path)
-                .unwrap();
-            */
-
-            println!("New Path: {new_path}");
+                .insert((in_node.to_string(), out_node.to_string()), concat_path);
         }
     }
+
+    for (pair, _) in new_table.state_to_state_transitions.clone().iter() {
+        let (from, to) = pair;
+
+        if from == to_rip {
+            new_table
+                .state_to_state_transitions
+                .remove(&(from.to_string(), to.to_string()));
+        } else if to == to_rip {
+            new_table
+                .state_to_state_transitions
+                .remove(&(from.to_string(), to.to_string()));
+        }
+    }
+    new_table
 }
 
 pub fn run_gnfa(input_table: &mut TransitionTable) -> Result<(), String> {
@@ -157,7 +168,10 @@ pub fn run_gnfa(input_table: &mut TransitionTable) -> Result<(), String> {
     }
 
     let _state_to_rip = find_minimum_transitions_state(input_table);
-    rip_state(input_table, &"q1".to_string());
+    let mut new_table1 = rip_state(input_table, &"q1".to_string());
+    let mut new_table2 = rip_state(&mut new_table1, &"q2".to_string());
+
+    println!("New TABLE: {:?}", new_table2.state_to_state_transitions);
 
     //println!("State to rip: {state_to_rip}");
 

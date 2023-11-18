@@ -1,7 +1,7 @@
 use std::collections::{HashMap, HashSet};
 use std::fmt;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TransitionTable {
     pub alphabet: HashSet<String>,
     pub states: HashSet<String>,
@@ -88,7 +88,7 @@ impl TransitionTable {
 }
 
 // This will the data will be initially be processed
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Transition {
     pub from: String,
     pub symbol: String,
