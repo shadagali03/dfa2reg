@@ -73,7 +73,16 @@ impl TransitionTable {
                 );
             }
         }
-        println!("{:?}", self.state_to_state_transitions);
+
+        // Set up START and FINAL transitions as well
+        self.state_to_state_transitions
+            .insert(("START".to_string(), self.initial.clone()), "!".to_string());
+
+        for accepting in self.accepting.iter() {
+            self.state_to_state_transitions
+                .insert((accepting.clone(), "FINAL".to_string()), "!".to_string());
+        }
+        println!("{:?}\n\n", self.state_to_state_transitions);
         Ok(())
     }
 }
