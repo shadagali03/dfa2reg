@@ -1,7 +1,7 @@
 use std::collections::{HashMap, HashSet};
 use std::fmt;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TransitionTable {
     pub alphabet: HashSet<String>,
     pub states: HashSet<String>,
@@ -73,13 +73,22 @@ impl TransitionTable {
                 );
             }
         }
-        println!("{:?}", self.state_to_state_transitions);
+
+        // Set up START and FINAL transitions as well
+        self.state_to_state_transitions
+            .insert(("START".to_string(), self.initial.clone()), "!".to_string());
+
+        for accepting in self.accepting.iter() {
+            self.state_to_state_transitions
+                .insert((accepting.clone(), "FINAL".to_string()), "!".to_string());
+        }
+        println!("{:?}\n\n", self.state_to_state_transitions);
         Ok(())
     }
 }
 
 // This will the data will be initially be processed
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Transition {
     pub from: String,
     pub symbol: String,
