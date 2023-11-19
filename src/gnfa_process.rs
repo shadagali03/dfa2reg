@@ -45,19 +45,21 @@ fn find_minimum_transitions_state(input_table: &mut TransitionTable) -> String {
     for state in input_table.states.iter() {
         track_edges.insert(state.to_string(), (0, 0));
     }
-    for (pair, can_transition_to) in input_table.delta_transitions.iter() {
-        let (from, _symbol) = pair;
 
-        // Handles outging edgese
-        if let Some(pair) = track_edges.get_mut(from) {
-            pair.1 += can_transition_to.len() as i64;
+    for (pair, _symbol) in input_table.state_to_state_transitions.iter() {
+        let (from, to) = pair;
+
+        // Handle incoming edges
+        if let Some(value) = track_edges.get_mut(to) {
+            if from != to {
+                value.0 += 1;
+            }
         }
 
-        for go_to in can_transition_to.iter() {
-            if go_to != from {
-                if let Some(pair) = track_edges.get_mut(go_to) {
-                    pair.0 += 1;
-                }
+        // Handles outgoing nodes from -> to then + 1
+        if let Some(value) = track_edges.get_mut(from) {
+            if from != to {
+                value.1 += 1;
             }
         }
     }
@@ -68,6 +70,7 @@ fn find_minimum_transitions_state(input_table: &mut TransitionTable) -> String {
             min_state = (pair.0 * pair.1, state.to_string());
         }
     }
+    println!("MIN STATE: {}, {:?}", min_state.1, track_edges);
 
     min_state.1
 }
@@ -99,21 +102,31 @@ fn rip_state(input_table: &mut TransitionTable, to_rip: &String) -> TransitionTa
     for in_node in incoming.iter() {
         for out_node in outgoing.iter() {
             // Constructs the new path from incoming to outgoing node through rip_state
-            let in_to_rip;
+            let mut in_to_rip = "".to_string();
             match input_table
                 .state_to_state_transitions
-                .get(&(in_node.to_string(), to_rip.to_string())) {
-                    Some(path) => in_to_rip = path.wrap(),
-                    None => panic!("Hash Map does not contain ({}, {})", in_node, to_rip)
+                .get(&(in_node.to_string(), to_rip.to_string()))
+            {
+                Some(path) => {
+                    if path != "!" {
+                        in_to_rip = path.wrap();
+                    }
                 }
+                None => panic!("Hash Map does not contain ({}, {})", in_node, to_rip),
+            }
 
-            let rip_to_out;
+            let mut rip_to_out = "".to_string();
             match input_table
                 .state_to_state_transitions
-                .get(&(to_rip.to_string(), out_node.to_string())) {
-                    Some(path) => rip_to_out = path.wrap(),
-                    None => panic!("Hash Map does not contain ({}, {})", to_rip, out_node)
+                .get(&(to_rip.to_string(), out_node.to_string()))
+            {
+                Some(path) => {
+                    if path != "!" {
+                        rip_to_out = path.wrap();
+                    }
                 }
+                None => panic!("Hash Map does not contain ({}, {})", to_rip, out_node),
+            }
 
             // Handles self loop
             let mut self_loop = "".to_string();
@@ -121,14 +134,15 @@ fn rip_state(input_table: &mut TransitionTable, to_rip: &String) -> TransitionTa
                 .state_to_state_transitions
                 .get(&(to_rip.to_string(), to_rip.to_string()))
             {
-                let temp_path = path.wrap();
-                self_loop = format!("{temp_path}*");
+                if path != "!" {
+                    let temp_path = path.wrap();
+                    self_loop = format!("{temp_path}*");
+                }
             }
 
             let new_path = format!("{in_to_rip}{rip_to_out}{self_loop}");
             let concat_path;
 
-            println!("Test Path: {}", new_path);
             if let Some(path) = input_table
                 .state_to_state_transitions
                 .get(&(in_node.to_string(), out_node.to_string()))
@@ -158,6 +172,7 @@ fn rip_state(input_table: &mut TransitionTable, to_rip: &String) -> TransitionTa
                 .remove(&(from.to_string(), to.to_string()));
         }
     }
+    new_table.states.remove(to_rip);
     new_table
 }
 
@@ -172,13 +187,28 @@ pub fn run_gnfa(input_table: &mut TransitionTable) -> Result<(), String> {
         Err(msg) => return Err(msg.to_string()),
     }
 
-    let _state_to_rip = find_minimum_transitions_state(input_table);
-    let mut new_table1 = rip_state(input_table, &"q1".to_string());
-    println!("{:?}\n\n", new_table1.state_to_state_transitions);
-    let mut new_table2 = rip_state(&mut new_table1, &"q2".to_string());
-    println!("{:?}\n\n", new_table2.state_to_state_transitions);
-    let new_table3 = rip_state(&mut new_table2, &"q0".to_string());
-    println!("{:?}\n\n", new_table3.state_to_state_transitions);
+    // let _state_to_rip = find_minimum_transitions_state(input_table);
+    // let mut new_table1 = rip_state(input_table, &"q1".to_string());
+    // println!("{:?}\n\n", new_table1.state_to_state_transitions);
+    // let mut new_table2 = rip_state(&mut new_table1, &"q2".to_string());
+    // println!("{:?}\n\n", new_table2.state_to_state_transitions);
+    // let new_table3 = rip_state(&mut new_table2, &"q0".to_string());
+    // println!("{:?}\n\n", new_table3.state_to_state_transitions);
+
+    for _ in 0..=input_table.states.len() {
+        let state_to_rip = find_minimum_transitions_state(input_table);
+        println!("{state_to_rip}");
+        *input_table = rip_state(input_table, &state_to_rip);
+        println!("{:?}", input_table.state_to_state_transitions);
+    }
+
+    // println!(
+    //     "Regex: {}",
+    //     input_table
+    //         .state_to_state_transitions
+    //         .get(&("START".to_string(), "FINAL".to_string()))
+    //         .unwrap()
+    // );
 
     Ok(())
 }
