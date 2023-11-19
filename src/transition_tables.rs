@@ -82,7 +82,6 @@ impl TransitionTable {
             self.state_to_state_transitions
                 .insert((accepting.clone(), "FINAL".to_string()), "!".to_string());
         }
-        println!("{:?}\n\n", self.state_to_state_transitions);
         Ok(())
     }
 }

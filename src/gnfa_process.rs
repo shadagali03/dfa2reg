@@ -70,7 +70,6 @@ fn find_minimum_transitions_state(input_table: &mut TransitionTable) -> String {
             min_state = (pair.0 * pair.1, state.to_string());
         }
     }
-    println!("MIN STATE: {}, {:?}", min_state.1, track_edges);
 
     min_state.1
 }
@@ -176,7 +175,7 @@ fn rip_state(input_table: &mut TransitionTable, to_rip: &String) -> TransitionTa
     new_table
 }
 
-pub fn run_gnfa(input_table: &mut TransitionTable) -> Result<(), String> {
+pub fn run_gnfa(input_table: &mut TransitionTable) -> Result<String, String> {
     match create_start_state(input_table) {
         Ok(_) => (),
         Err(msg) => return Err(msg.to_string()),
@@ -197,20 +196,16 @@ pub fn run_gnfa(input_table: &mut TransitionTable) -> Result<(), String> {
 
     for _ in 0..=input_table.states.len() {
         let state_to_rip = find_minimum_transitions_state(input_table);
-        println!("{state_to_rip}");
         *input_table = rip_state(input_table, &state_to_rip);
-        println!("{:?}", input_table.state_to_state_transitions);
     }
 
-    // println!(
-    //     "Regex: {}",
-    //     input_table
-    //         .state_to_state_transitions
-    //         .get(&("START".to_string(), "FINAL".to_string()))
-    //         .unwrap()
-    // );
-
-    Ok(())
+    match input_table
+        .state_to_state_transitions
+        .get(&("START".to_string(), "FINAL".to_string()))
+    {
+        Some(regex) => Ok(regex.to_string()),
+        None => Err("Could not compute regex, No path from Start to Final state!".to_string()),
+    }
 }
 
 pub trait Symbol {
