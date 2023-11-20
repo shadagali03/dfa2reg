@@ -1,0 +1,5 @@
+var searchIndex = JSON.parse('{\
+"dfa2reg":{"doc":"","t":"AAFFDDLLLLLLLLLLLLLLLLLL","n":["scanner","transition_tables","run","run_file","Transition","TransitionTable","borrow","borrow","borrow_mut","borrow_mut","fmt","fmt","from","from","into","into","new","try_from","try_from","try_into","try_into","type_id","type_id","validate"],"q":[[0,"dfa2reg"],[2,"dfa2reg::scanner"],[4,"dfa2reg::transition_tables"]],"d":["","","","","","","","","","","","","Returns the argument unchanged.","Returns the argument unchanged.","Calls <code>U::from(self)</code>.","Calls <code>U::from(self)</code>.","","","","","","","",""],"i":[0,0,0,0,0,0,3,6,3,6,3,6,3,6,3,6,3,3,6,3,6,3,6,3],"f":[0,0,[1,[[2,[1]]]],[1,[[2,[1]]]],0,0,[[]],[[]],[[]],[[]],[[3,4],5],[[6,4],5],[[]],[[]],[[]],[[]],[[],3],[[],2],[[],2],[[],2],[[],2],[[],7],[[],7],[3,[[2,[1]]]]],"c":[],"p":[[3,"String"],[4,"Result"],[3,"TransitionTable"],[3,"Formatter"],[6,"Result"],[3,"Transition"],[3,"TypeId"]]}\
+}');
+if (typeof window !== 'undefined' && window.initSearch) {window.initSearch(searchIndex)};
+if (typeof exports !== 'undefined') {exports.searchIndex = searchIndex};

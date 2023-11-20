@@ -1,0 +1,3 @@
+(function() {var implementors = {
+"dfa2reg":[["impl Freeze for <a class=\"struct\" href=\"dfa2reg/transition_tables/struct.TransitionTable.html\" title=\"struct dfa2reg::transition_tables::TransitionTable\">TransitionTable</a>",1,["dfa2reg::transition_tables::TransitionTable"]],["impl Freeze for <a class=\"struct\" href=\"dfa2reg/transition_tables/struct.Transition.html\" title=\"struct dfa2reg::transition_tables::Transition\">Transition</a>",1,["dfa2reg::transition_tables::Transition"]]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
