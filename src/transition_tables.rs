@@ -12,6 +12,14 @@ pub struct TransitionTable {
     pub state_to_state_transitions: HashMap<(String, String), String>,
 }
 
+// This will the data will be initially be processed
+#[derive(Debug, Clone)]
+pub struct Transition {
+    pub from: String,
+    pub symbol: String,
+    pub to: String,
+}
+
 impl TransitionTable {
     pub fn new() -> Self {
         Self {
@@ -28,6 +36,31 @@ impl TransitionTable {
     pub fn validate(&self) -> Result<(), String> {
         // Pass through TransitionTable and validate all fields
         // Return specific error message
+
+        // Validate Alphabet already complete
+
+        // No need to validate states
+
+        // Initial -> Should exist within states set
+        if self.states.contains(&self.initial) == false {
+            return Err("Error: Initial State does not exist within given states!".to_string());
+        }
+
+        // Accepting -> Iterate through accepting and check if states contains
+        for state in self.accepting.iter() {
+            if self.states.contains(state) == false {
+                return Err("Error: State in accepting does not exist in given states!".to_string());
+            }
+        }
+
+        // Loop through every transitions and check if from, to and symbol are valid
+        for transition in self.transitions.iter() {
+            if self.states.contains(&transition.from) == false
+                || self.states.contains(&transition.to) == false
+            {
+                return Err("Error: Transition diagram has invalid states!".to_string());
+            }
+        }
         todo!();
     }
 
@@ -84,14 +117,6 @@ impl TransitionTable {
         }
         Ok(())
     }
-}
-
-// This will the data will be initially be processed
-#[derive(Debug, Clone)]
-pub struct Transition {
-    pub from: String,
-    pub symbol: String,
-    pub to: String,
 }
 
 impl fmt::Display for TransitionTable {

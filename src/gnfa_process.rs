@@ -139,7 +139,7 @@ fn rip_state(input_table: &mut TransitionTable, to_rip: &String) -> TransitionTa
                 }
             }
 
-            let new_path = format!("{in_to_rip}{rip_to_out}{self_loop}");
+            let new_path = format!("{in_to_rip}{self_loop}{rip_to_out}");
             let concat_path;
 
             if let Some(path) = input_table
@@ -186,16 +186,13 @@ pub fn run_gnfa(input_table: &mut TransitionTable) -> Result<String, String> {
         Err(msg) => return Err(msg.to_string()),
     }
 
-    // let _state_to_rip = find_minimum_transitions_state(input_table);
-    // let mut new_table1 = rip_state(input_table, &"q1".to_string());
-    // println!("{:?}\n\n", new_table1.state_to_state_transitions);
-    // let mut new_table2 = rip_state(&mut new_table1, &"q2".to_string());
-    // println!("{:?}\n\n", new_table2.state_to_state_transitions);
-    // let new_table3 = rip_state(&mut new_table2, &"q0".to_string());
-    // println!("{:?}\n\n", new_table3.state_to_state_transitions);
-
-    for _ in 0..=input_table.states.len() {
+    for i in 0..=input_table.states.len() {
         let state_to_rip = find_minimum_transitions_state(input_table);
+        println!(
+            "Step {}: {:?}\n\n",
+            i + 1,
+            input_table.state_to_state_transitions
+        );
         *input_table = rip_state(input_table, &state_to_rip);
     }
 

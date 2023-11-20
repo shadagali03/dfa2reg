@@ -6,20 +6,24 @@ use std::fs::read_to_string;
 pub struct Scanner {}
 
 // Should accept numbers as symbols as well
-pub fn validate_alphabet(alphabet: Vec<char>, org_alphabet: Vec<&str>) -> bool {
-    for c in alphabet.iter() {
-        match c {
+pub fn validate_alphabet(org_alphabet: &Vec<String>) -> bool {
+    if !org_alphabet.iter().all(|symbol| symbol.len() == 1) {
+        return false;
+    }
+    for c in org_alphabet.iter() {
+        match c.chars().next().unwrap() {
             'a'..='z' | '0'..='1' | '!' => (),
             _ => return false,
         }
     }
-    return alphabet.len() == org_alphabet.len();
+    return true;
 }
 
 impl Scanner {
     pub fn new() -> Self {
         Self {}
     }
+
     pub fn run_file(&self, pathname: String) -> Result<String, String> {
         match read_to_string(pathname) {
             Err(msg) => return Err(msg.to_string()),
@@ -44,15 +48,14 @@ impl Scanner {
             Some(alphabet) => {
                 let org_alphabet: Vec<String> =
                     alphabet.split(",").map(|s| s.to_string()).collect();
-                //let insert_alphabet: Vec<String> =
-                //alphabet.split(",").flat_map(|c| c.chars()).collect();
-
-                //if validate_alphabet(insert_alphabet.clone(), org_alphabet) == false {
-                //return Err("Alphabet needs to contain characters from A-Z, a-z, ! and needs to be seperated by comma".to_string());
-                //}
-                user_transition.alphabet = HashSet::from_iter(org_alphabet.iter().cloned());
+                match validate_alphabet(&org_alphabet) {
+                    true => {
+                        user_transition.alphabet = HashSet::from_iter(org_alphabet.iter().cloned())
+                    }
+                    _ => return Err("Error: Alphabet contains invalid characters".to_string()),
+                }
             }
-            None => return Err("Vector does not contain alphabet".to_string()),
+            None => return Err("Error: Vector does not contain alphabet".to_string()),
         }
 
         // Handle states
