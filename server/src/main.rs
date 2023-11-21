@@ -12,7 +12,7 @@ fn main() {
         eprintln!("Too many arguments");
         process::exit(64);
     } else if args.len() == 1 {
-        match scanner.run_file("src/inputs/ex_input0.txt".to_string()) {
+        match scanner.run_file("src/inputs/ex_input2.txt".to_string()) {
             Ok(regex) => {
                 println!("Regex: {regex}");
                 process::exit(0);
