@@ -16,7 +16,14 @@ function Header() {
 				{/* Add more items for the rest of your navbar */}
 				<div className="ml-auto">
 					{/* Add more navbar items here */}
-					About Me
+					<a
+						href="https://celadon-dango-d36e62.netlify.app"
+						className="text-black text-xl hover:underline inline-block transition duration-300 ease-in-out"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						About Me
+					</a>
 				</div>
 			</div>
 		</nav>

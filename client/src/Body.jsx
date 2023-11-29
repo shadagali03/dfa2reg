@@ -2,9 +2,9 @@ import React from "react";
 
 function Body() {
 	return (
-		<div className="flex">
+		<div className="flex justify-center">
 			{/* First Column */}
-			<div className="w-full sm:w-1/2 p-4">
+			<div className="w-3/4 p-4">
 				<div className="bg-gray-200 shadow-md rounded-md flex-grow p-4">
 					<div className="bg-white p-4 h-full rounded-md shadow-md">
 						{/* Input 1 */}
@@ -61,7 +61,7 @@ function Body() {
 								Enter Transitions
 							</label>
 							<textarea
-								className="w-full h-32 px-3 py-2 border rounded-md resize-none focus:outline-none focus:border-blue-500"
+								className="w-full h-32 px-3 py-2 border rounded-md resize-y focus:outline-none focus:border-blue-500"
 								placeholder="Ex. q0,a,q1"
 							/>
 						</div>
@@ -74,13 +74,12 @@ function Body() {
 				</div>
 			</div>
 
-			{/* Second Column */}
+			{/* Second Column
 			<div className="w-full sm:w-1/2 flex-grow p-4">
 				<div className="bg-gray-200 shadow-md h-full rounded-md">
-					{/* Content for the second box */}
 					<p className="text-black text-center text-xl">How To Use</p>
 				</div>
-			</div>
+			</div> */}
 		</div>
 	);
 }

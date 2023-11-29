@@ -134,8 +134,11 @@ fn rip_state(input_table: &mut TransitionTable, to_rip: &String) -> TransitionTa
                 .get(&(to_rip.to_string(), to_rip.to_string()))
             {
                 if path != "!" {
-                    let temp_path = path.wrap();
-                    self_loop = format!("{temp_path}*");
+                    if path.len() > 1 {
+                        self_loop = format!("({path})*");
+                    } else {
+                        self_loop = format!("{path}*");
+                    }
                 }
             }
 
@@ -186,14 +189,17 @@ pub fn run_gnfa(input_table: &mut TransitionTable) -> Result<String, String> {
         Err(msg) => return Err(msg.to_string()),
     }
 
-    for i in 0..=input_table.states.len() {
-        let state_to_rip = find_minimum_transitions_state(input_table);
+    for i in 0..input_table.states.len() {
+        println!("{:?}", input_table.states);
+        let _state_to_rip = find_minimum_transitions_state(input_table);
+        let state = format!("q{}", i);
         println!(
             "Step {}: {:?}\n\n",
             i + 1,
             input_table.state_to_state_transitions
         );
-        *input_table = rip_state(input_table, &state_to_rip);
+        //*input_table = rip_state(input_table, &_state_to_rip);
+        *input_table = rip_state(input_table, &state);
     }
 
     match input_table

@@ -15,12 +15,13 @@ function App() {
 			<Body />
 			<div className="bg-gray-200 p-6 ml-16 mr-16 mt-2 mb-16 rounded-md shadow-md">
 				<label className="block text-sm font-semibold text-gray-600">
-					Your Input
+					Regular Expression
 				</label>
 				<input
 					type="text"
 					className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500"
-					placeholder="Enter text"
+					placeholder=""
+					readOnly
 				/>
 			</div>
 
