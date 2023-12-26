@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 function Body() {
+	// Make the GET request using fetch
 	const [tSystem, setTSystem] = useState({
 		alphabet: "",
 		states: "",
@@ -48,11 +49,19 @@ function Body() {
 			transitions: value,
 		}));
 	};
-	const handleButtonClick = () => {
+	const handleButtonClick = async () => {
 		// Create an object with values from all input fields
-		const inputObject = { ...tSystem };
-		console.log("Input Object:", inputObject);
-		setRegex("here");
+		const apiUrl = "http://127.0.0.1:8080/regex";
+		console.log("Input Object:", tSystem);
+		const request_options = {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify(tSystem),
+		};
+		const response = await fetch(apiUrl, request_options);
+		// const response = await fetch("http://127.0.0.1:8080/generate_regex");
+		const val = await response.json();
+		setRegex(val.regex);
 		// You can use the 'inputObject' as needed, such as sending it to an API, etc.
 	};
 	return (

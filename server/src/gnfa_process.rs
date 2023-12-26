@@ -190,14 +190,14 @@ pub fn run_gnfa(input_table: &mut TransitionTable) -> Result<String, String> {
     }
 
     for i in 0..input_table.states.len() {
-        println!("{:?}", input_table.states);
+        // println!("{:?}", input_table.states);
         let _state_to_rip = find_minimum_transitions_state(input_table);
         let state = format!("q{}", i);
-        println!(
-            "Step {}: {:?}\n\n",
-            i + 1,
-            input_table.state_to_state_transitions
-        );
+        // println!(
+        //     "Step {}: {:?}\n\n",
+        //     i + 1,
+        //     input_table.state_to_state_transitions
+        // );
         //*input_table = rip_state(input_table, &_state_to_rip);
         *input_table = rip_state(input_table, &state);
     }
