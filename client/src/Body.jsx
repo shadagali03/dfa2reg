@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import Alerts from "./components/Alerts";
+import { validation } from "./validation";
 
 function Body() {
 	// Make the GET request using fetch
@@ -10,6 +12,8 @@ function Body() {
 		transitions: "",
 	});
 	const [regex, setRegex] = useState("");
+	const [isValid, setIsValid] = useState(true);
+	const [errorMessage, setMessage] = useState("");
 
 	const handleAlphabetChange = (e) => {
 		const value = e.target.value;
@@ -51,18 +55,23 @@ function Body() {
 	};
 	const handleButtonClick = async () => {
 		// Create an object with values from all input fields
-		const apiUrl = "http://127.0.0.1:8080/regex";
-		console.log("Input Object:", tSystem);
-		const request_options = {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify(tSystem),
-		};
-		const response = await fetch(apiUrl, request_options);
-		// const response = await fetch("http://127.0.0.1:8080/generate_regex");
-		const val = await response.json();
-		setRegex(val.regex);
-		// You can use the 'inputObject' as needed, such as sending it to an API, etc.
+		const [isVal, message] = validation(tSystem);
+		setIsValid(isVal);
+		setMessage(message);
+		console.log(message);
+		if (isVal) {
+			const apiUrl = "http://127.0.0.1:8080/regex";
+			console.log("Input Object:", tSystem);
+			const request_options = {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(tSystem),
+			};
+			const response = await fetch(apiUrl, request_options);
+			// const response = await fetch("http://127.0.0.1:8080/generate_regex");
+			const val = await response.json();
+			setRegex(val.regex);
+		}
 	};
 	return (
 		<div className="flex justify-center">
@@ -147,6 +156,11 @@ function Body() {
 							Generate Regex
 						</button>
 					</div>
+					{!isValid && (
+						<div className="mr-32 ml-32 mt-3">
+							<Alerts message={errorMessage} />
+						</div>
+					)}
 				</div>
 				<div className="bg-gray-200 p-6 mt-8 mb-16 rounded-md shadow-md">
 					<label className="block text-sm font-semibold text-gray-600">

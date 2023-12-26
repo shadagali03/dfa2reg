@@ -1,5 +1,5 @@
 use actix_cors::Cors;
-use actix_web::{get, http, web, App, HttpRequest, HttpResponse, HttpServer, Responder, Result};
+use actix_web::{get, http, web, App, HttpResponse, HttpServer, Responder};
 
 use serde::Deserialize;
 
