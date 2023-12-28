@@ -1,0 +1,13 @@
+[package]
+name = "dfa2regapi"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+shuttle-actix-web = "0.35.0"
+shuttle-runtime = "0.35.0"
+tokio = "1.26.0"
+actix-web = "4"
+serde = { version = "1.0", features = ["derive"] }
+futures = "0.3"
+actix-cors = "0.6.5"
